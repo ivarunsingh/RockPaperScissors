@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 18px;
+        }
+        body{
+            background-color: black;
+            color: white;
+        }
+        h1 {
+            font-size: 22px;
+        }
+
+        .container {
+            width: 50vw;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .main-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-iconsg {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .btn-resetg {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .move-icon {
+            font-size: 60px;
+            /* padding: 20px 30px; */
+            height: 100px;
+            width: 100px;
+            margin: 25px 20px;
+            border: none;
+            border-radius: 100px;
+            background-color: transparent;
+            cursor: pointer;
+            transition: transform .2s;
+        }
+
+        .move-icon:hover {
+            transform: scale(1.5);
+        }
+
+        .btn-resetg > button {
+            border: none;
+            font-size: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin: 20px;
+            background-color: rgb(185, 185, 185);
+        } 
+
+        .btn-resetg>button:hover {
+            background-color: rgb(228, 230, 232);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+     <div class="main-title"><h1>Rock Paper Scissors</h1></div>   
+
+<div class="main-iconsg">
+    <!-- rock  -->
+    <button onclick="
+    playGame('✊');
+    " class="move-icon">✊</button>
+
+    <!-- paper  -->
+    <button onclick="
+    playGame('🖐️');
+    " class="move-icon">🖐️</button>
+
+    <!-- scissors -->
+    <button onclick="
+    playGame('✌️');
+    " class="move-icon">✌️</button>
+    </div>
+
+<div class="para-content">
+    <p class="js-result"></p>
+    <p class="js-moves"></p>
+    <p class="js-score"></p>
+</div>
+
+<div class="btn-resetg">
+    <button onclick="
+    score.wins = 0;
+    score.losses = 0;
+    score.ties = 0;
+    localStorage.removeItem('score');
+    updateScoreElement();
+    ">Reset Score</button>
+    </div>
+
+    </div>
+    <script>
+        let score = JSON.parse(localStorage.getItem('score')) || {
+            wins: 0,
+            losses: 0,
+            ties: 0
+        };
+
+        updateScoreElement();
+
+        function playGame(playerMove) {
+            const computerMove = pickComputerMove();
+
+            let result = '';
+
+            if (playerMove === '✌️') {
+                if (computerMove === '✊') {
+                    result = 'You lose.';
+                } else if (computerMove === '🖐️') {
+                    result = 'You win.';
+                } else if (computerMove === '✌️') {
+                    result = 'Tie.';
+                }
+            } else if (playerMove === '✊') {
+                if (computerMove === '✊') {
+                    result = 'Tie.';
+                } else if (computerMove === '🖐️') {
+                    result = 'You lose.';
+                } else if (computerMove === '✌️') {
+                    result = 'You win.';
+                }
+            } else if (playerMove === '🖐️') {
+                if (computerMove === '✊') {
+                    result = 'You win.';
+                } else if (computerMove === '🖐️') {
+                    result = 'Tie.';
+                } else if (computerMove === '✌️') {
+                    result = 'You lose.';
+                }
+            }
+
+            if (result === 'You win.') {
+                score.wins += 1;
+            } else if (result === 'You lose.') {
+                score.losses += 1;
+            } else if (result === 'Tie.') {
+                score.ties += 1;
+            }
+
+            localStorage.setItem('score', JSON.stringify(score));
+
+            updateScoreElement();
+
+            document.querySelector('.js-result').innerHTML = result;
+
+            document.querySelector('.js-moves').innerHTML = `You: ${playerMove} - ${computerMove} Computer`;
+        }
+
+        function updateScoreElement() {
+            document.querySelector('.js-score').innerHTML = `Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`;
+        }
+
+        function pickComputerMove() {
+            const randomNumber = Math.random();
+            let computerMove = '';
+
+            if (randomNumber >= 0 && randomNumber < 0.33) {
+                computerMove = '✊';
+            } else if (randomNumber >= 0.33 && randomNumber < 0.66) {
+                computerMove = '🖐️';
+            } else if (randomNumber >= 0.66 && randomNumber < 1) {
+                computerMove = '✌️';
+            }
+            return computerMove;
+        }
+    </script>
+</body>
+
+</html>
